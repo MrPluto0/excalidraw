@@ -37,9 +37,11 @@ export const DEFAULT_FONTS = [
   },
 ];
 
-const defaultFontFamilies = new Set(DEFAULT_FONTS.map((x) => x.value));
+const defaultFontFamilies = new Set<FontFamilyValues>(
+  DEFAULT_FONTS.map((x) => x.value),
+);
 
-export const isDefaultFont = (fontFamily: number | null) => {
+export const isDefaultFont = (fontFamily: FontFamilyValues) => {
   if (!fontFamily) {
     return false;
   }
@@ -69,7 +71,7 @@ export const FontPicker = React.memo(
   }: FontPickerProps) => {
     const defaultFonts = useMemo(() => DEFAULT_FONTS, []);
     const onSelectCallback = useCallback(
-      (value: number | false) => {
+      (value: FontFamilyValues | false) => {
         if (value) {
           onSelect(value);
         }

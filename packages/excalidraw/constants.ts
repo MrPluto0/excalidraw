@@ -138,6 +138,8 @@ export const FONT_FAMILY = {
   "Lilita One": 7,
   "Comic Shanns": 8,
   "Liberation Sans": 9,
+  // Placeholder for type "FontFamilyValues"
+  custom: "custom",
 };
 
 export const FONT_FAMILY_FALLBACKS = {
@@ -146,7 +148,7 @@ export const FONT_FAMILY_FALLBACKS = {
 };
 
 export const getFontFamilyFallbacks = (
-  fontFamily: number,
+  fontFamily: FontFamilyValues,
 ): Array<keyof typeof FONT_FAMILY_FALLBACKS> => {
   switch (fontFamily) {
     case FONT_FAMILY.Excalifont:

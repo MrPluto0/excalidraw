@@ -17,9 +17,8 @@ export class ExcalidrawFontFace {
   constructor(family: string, uri: string, descriptors?: FontFaceDescriptors) {
     this.urls = ExcalidrawFontFace.createUrls(uri);
 
-    const sources = this.urls
-      .map((url) => `url(${url}) ${ExcalidrawFontFace.getFormat(url)}`)
-      .join(", ");
+    // FontFace API detect the filetype, such as 'ttf', so there is no need to add format('ttf')
+    const sources = this.urls.map((url) => `url(${url})`).join(", ");
 
     this.fontFace = new FontFace(family, sources, {
       display: "swap",

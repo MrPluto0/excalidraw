@@ -965,7 +965,7 @@ export const actionChangeFontFamily = register({
   },
   PanelComponent: ({ elements, appState, app, updateData }) => {
     const cachedElementsRef = useRef<Map<string, ExcalidrawElement>>(new Map());
-    const prevSelectedFontFamilyRef = useRef<number | null>(null);
+    const prevSelectedFontFamilyRef = useRef<FontFamilyValues | null>(null);
     // relying on state batching as multiple `FontPicker` handlers could be called in rapid succession and we want to combine them
     const [batchedData, setBatchedData] = useState<ChangeFontFamilyData>({});
     const isUnmounted = useRef(true);
