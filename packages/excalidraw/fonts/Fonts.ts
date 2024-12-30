@@ -40,7 +40,7 @@ export class Fonts {
 
   private static _registered:
     | Map<
-        number,
+        FontFamilyValues,
         {
           metadata: FontMetadata;
           fontFaces: ExcalidrawFontFace[];
@@ -286,7 +286,7 @@ export class Fonts {
   }
 
   private static *fontFacesStylesGenerator(
-    families: Array<number>,
+    families: Array<FontFamilyValues>,
     charsPerFamily: Record<number, Set<string>>,
   ): Generator<Promise<void | readonly [number, string]>> {
     for (const [familyIndex, family] of families.entries()) {
@@ -343,7 +343,7 @@ export class Fonts {
       | Fonts
       | {
           registered: Map<
-            number,
+            FontFamilyValues,
             { metadata: FontMetadata; fontFaces: ExcalidrawFontFace[] }
           >;
         },
@@ -354,7 +354,8 @@ export class Fonts {
     // TODO: likely we will need to abandon number value in order to support custom fonts
     const fontFamily =
       FONT_FAMILY[family as keyof typeof FONT_FAMILY] ??
-      FONT_FAMILY_FALLBACKS[family as keyof typeof FONT_FAMILY_FALLBACKS];
+      FONT_FAMILY_FALLBACKS[family as keyof typeof FONT_FAMILY_FALLBACKS] ??
+      family;
 
     const registeredFamily = this.registered.get(fontFamily);
 
@@ -383,12 +384,16 @@ export class Fonts {
     };
 
     const init = (
-      family: keyof typeof FONT_FAMILY | keyof typeof FONT_FAMILY_FALLBACKS,
+      family:
+        | keyof typeof FONT_FAMILY
+        | keyof typeof FONT_FAMILY_FALLBACKS
+        | string,
       ...fontFacesDescriptors: ExcalidrawFontFaceDescriptor[]
     ) => {
       const fontFamily =
         FONT_FAMILY[family as keyof typeof FONT_FAMILY] ??
-        FONT_FAMILY_FALLBACKS[family as keyof typeof FONT_FAMILY_FALLBACKS];
+        FONT_FAMILY_FALLBACKS[family as keyof typeof FONT_FAMILY_FALLBACKS] ??
+        family;
 
       // default to Excalifont metrics
       const metadata =
@@ -407,6 +412,11 @@ export class Fonts {
     init("Lilita One", ...LilitaFontFaces);
     init("Nunito", ...NunitoFontFaces);
     init("Virgil", ...VirgilFontFaces);
+
+    init("custom", {
+      uri: "https://zoomglass.obs.cn-north-4.myhuaweicloud.com/frontends/fonts/PlaywriteCOGuides-Regular.ttf",
+    });
+    // init("custom", ...LilitaFontFaces);
 
     // fallback font faces
     init(CJK_HAND_DRAWN_FALLBACK_FONT, ...XiaolaiFontFaces);
@@ -429,7 +439,7 @@ export class Fonts {
           families.add(element.fontFamily);
         }
         return families;
-      }, new Set<number>()),
+      }, new Set<FontFamilyValues>()),
     );
   }
 
@@ -438,8 +448,8 @@ export class Fonts {
    */
   private static getCharsPerFamily(
     elements: ReadonlyArray<ExcalidrawElement>,
-  ): Record<number, Set<string>> {
-    const charsPerFamily: Record<number, Set<string>> = {};
+  ): Record<FontFamilyValues, Set<string>> {
+    const charsPerFamily: Record<FontFamilyValues, Set<string>> = {};
 
     for (const element of elements) {
       if (!isTextElement(element)) {
@@ -463,8 +473,8 @@ export class Fonts {
    * Get characters for a given family.
    */
   private static getCharacters(
-    charsPerFamily: Record<number, Set<string>>,
-    family: number,
+    charsPerFamily: Record<FontFamilyValues, Set<string>>,
+    family: FontFamilyValues,
   ) {
     return charsPerFamily[family]
       ? Array.from(charsPerFamily[family]).join("")

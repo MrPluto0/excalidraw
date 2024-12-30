@@ -37,7 +37,7 @@ export interface FontDescriptor {
 interface FontPickerListProps {
   selectedFontFamily: FontFamilyValues | null;
   hoveredFontFamily: FontFamilyValues | null;
-  onSelect: (value: number) => void;
+  onSelect: (value: number | string) => void;
   onHover: (value: number) => void;
   onLeave: () => void;
   onOpen: () => void;
@@ -205,7 +205,7 @@ export const FontPickerList = React.memo(
         // allow to tab between search and selected font
         tabIndex={font.value === selectedFontFamily ? 0 : -1}
         onClick={(e) => {
-          onSelect(Number(e.currentTarget.value));
+          onSelect(Number(e.currentTarget.value) || e.currentTarget.value);
         }}
         onMouseMove={() => {
           if (hoveredFont?.value !== font.value) {

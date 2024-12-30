@@ -5,6 +5,7 @@ import {
   FontFamilyCodeIcon,
 } from "../components/icons";
 import { FONT_FAMILY, FONT_FAMILY_FALLBACKS } from "../constants";
+import type { FontFamilyValues } from "../element/types";
 
 /**
  * Encapsulates font metrics with additional font metadata.
@@ -33,7 +34,7 @@ export interface FontMetadata {
   fallback?: true;
 }
 
-export const FONT_METADATA: Record<number, FontMetadata> = {
+export const FONT_METADATA: Record<FontFamilyValues, FontMetadata> = {
   [FONT_FAMILY.Excalifont]: {
     metrics: {
       unitsPerEm: 1000,
