@@ -271,7 +271,7 @@ export const IDLE_THRESHOLD = 60_000;
 // Report a user active each ACTIVE_THRESHOLD milliseconds
 export const ACTIVE_THRESHOLD = 3_000;
 
-export const THEME_FILTER = cssVariables.themeFilter;
+export const THEME_FILTER = "invert(93%) hue-rotate(180deg)";
 
 export const URL_QUERY_KEYS = {
   addLibrary: "addLibrary",
