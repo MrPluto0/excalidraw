@@ -90,6 +90,7 @@ import {
   ARROW_TYPE,
   DEFAULT_REDUCED_GLOBAL_ALPHA,
   isSafari,
+  FONT_FAMILY,
   type EXPORT_IMAGE_TYPES,
 } from "../constants";
 import type { ExportedElements } from "../data";
@@ -466,6 +467,8 @@ import { cropElement } from "../element/cropElement";
 import { wrapText } from "../element/textWrapping";
 import { actionCopyElementLink } from "../actions/actionElementLink";
 import { isElementLink, parseElementLinkFromURL } from "../element/elementLink";
+import { FONT_METADATA } from "../fonts/FontMetadata";
+import { ExcalidrawFontFace } from "../fonts/ExcalidrawFontFace";
 
 const AppContext = React.createContext<AppClassProperties>(null!);
 const AppPropsContext = React.createContext<AppProps>(null!);
@@ -712,6 +715,8 @@ class App extends React.Component<AppProps, AppState> {
 
     this.store = new Store();
     this.history = new History();
+    this.fonts = new Fonts(this.scene);
+    this.history = new History();
 
     if (excalidrawAPI) {
       const api: ExcalidrawImperativeAPI = {
@@ -744,6 +749,7 @@ class App extends React.Component<AppProps, AppState> {
         onPointerUp: (cb) => this.onPointerUpEmitter.on(cb),
         onScrollChange: (cb) => this.onScrollChangeEmitter.on(cb),
         onUserFollow: (cb) => this.onUserFollowEmitter.on(cb),
+        setFontFamily: this.setFontFamily,
       } as const;
       if (typeof excalidrawAPI === "function") {
         excalidrawAPI(api);
@@ -756,9 +762,6 @@ class App extends React.Component<AppProps, AppState> {
       container: this.excalidrawContainerRef.current,
       id: this.id,
     };
-
-    this.fonts = new Fonts(this.scene);
-    this.history = new History();
 
     this.actionManager.registerAll(actions);
     this.actionManager.registerAction(
@@ -10911,6 +10914,15 @@ class App extends React.Component<AppProps, AppState> {
     await setLanguage(currentLang);
     this.setAppState({});
   }
+
+  setFontFamily = (fontFamily: string, url: string) => {
+    const metadata = FONT_METADATA[FONT_FAMILY.Excalifont];
+    this.fonts.registered.set(fontFamily, {
+      metadata,
+      fontFaces: [new ExcalidrawFontFace(fontFamily, url)],
+    });
+    Fonts.loadAllFonts();
+  };
 }
 
 // -----------------------------------------------------------------------------

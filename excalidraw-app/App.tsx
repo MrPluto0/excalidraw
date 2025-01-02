@@ -386,10 +386,6 @@ const ExcalidrawWrapper = () => {
         delete window.visualDebug;
       }
       forceRefresh((prev) => !prev);
-
-      if (excalidrawAPI) {
-        ActionDraw(excalidrawAPI);
-      }
     }
   }, [excalidrawAPI]);
 
@@ -611,6 +607,16 @@ const ExcalidrawWrapper = () => {
     return () => {
       window.removeEventListener(EVENT.BEFORE_UNLOAD, unloadHandler);
     };
+  }, [excalidrawAPI]);
+
+  useEffect(() => {
+    if (excalidrawAPI) {
+      ActionDraw(excalidrawAPI);
+      excalidrawAPI.setFontFamily(
+        "Custom",
+        "https://fonts.gstatic.com/s/sixtyfour/v1/OD5BuMCT1numDm3nakX3rEq4DL6w2w.ttf",
+      );
+    }
   }, [excalidrawAPI]);
 
   const onChange = (
