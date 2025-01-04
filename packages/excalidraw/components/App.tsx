@@ -10915,13 +10915,22 @@ class App extends React.Component<AppProps, AppState> {
     this.setAppState({});
   }
 
-  setFontFamily = (fontFamily: string, url: string) => {
+  setFontFamily = (
+    fontFamily: string,
+    fontFaces: ({ url: string } & FontFaceDescriptors)[],
+    reload = true,
+  ) => {
     const metadata = FONT_METADATA[FONT_FAMILY.Excalifont];
     this.fonts.registered.set(fontFamily, {
       metadata,
-      fontFaces: [new ExcalidrawFontFace(fontFamily, url)],
+      fontFaces: fontFaces.map(
+        (fontFace) =>
+          new ExcalidrawFontFace(fontFamily, fontFace.url, fontFace),
+      ),
     });
-    Fonts.loadAllFonts();
+    if (reload) {
+      Fonts.loadAllFonts();
+    }
   };
 }
 

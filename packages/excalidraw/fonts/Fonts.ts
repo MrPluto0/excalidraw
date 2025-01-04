@@ -413,11 +413,6 @@ export class Fonts {
     init("Nunito", ...NunitoFontFaces);
     init("Virgil", ...VirgilFontFaces);
 
-    init("custom", {
-      uri: "https://zoomglass.obs.cn-north-4.myhuaweicloud.com/frontends/fonts/PlaywriteCOGuides-Regular.ttf",
-    });
-    // init("custom", ...LilitaFontFaces);
-
     // fallback font faces
     init(CJK_HAND_DRAWN_FALLBACK_FONT, ...XiaolaiFontFaces);
     init(WINDOWS_EMOJI_FALLBACK_FONT, ...EmojiFontFaces);

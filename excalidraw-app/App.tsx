@@ -612,10 +612,11 @@ const ExcalidrawWrapper = () => {
   useEffect(() => {
     if (excalidrawAPI) {
       ActionDraw(excalidrawAPI);
-      excalidrawAPI.setFontFamily(
-        "Custom",
-        "https://fonts.gstatic.com/s/sixtyfour/v1/OD5BuMCT1numDm3nakX3rEq4DL6w2w.ttf",
-      );
+      excalidrawAPI.setFontFamily("Custom", [
+        {
+          url: "https://fonts.gstatic.com/s/sixtyfour/v1/OD5BuMCT1numDm3nakX3rEq4DL6w2w.ttf",
+        },
+      ]);
     }
   }, [excalidrawAPI]);
 
