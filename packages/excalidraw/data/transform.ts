@@ -55,6 +55,7 @@ import { syncInvalidIndices } from "../fractionalIndex";
 import { getLineHeight } from "../fonts";
 import { isArrowElement } from "../element/typeChecks";
 import { pointFrom, type LocalPoint } from "../../math";
+import { wrapText } from "../element/textWrapping";
 
 export type ValidLinearElement = {
   type: "arrow" | "line";
@@ -567,19 +568,36 @@ export const convertToExcalidrawElements = (
         const lineHeight = element?.lineHeight || getLineHeight(fontFamily);
         const text = element.text ?? "";
         const normalizedText = normalizeText(text);
-        const metrics = measureText(
-          normalizedText,
-          getFontString({ fontFamily, fontSize }),
-          lineHeight,
-        );
 
-        excalidrawElement = newTextElement({
-          width: metrics.width,
-          height: metrics.height,
-          fontFamily,
-          fontSize,
-          ...element,
-        });
+        if (element.width && element.height) {
+          const wrappedText = wrapText(
+            normalizedText,
+            getFontString({ fontFamily, fontSize }),
+            element.width,
+          );
+          excalidrawElement = newTextElement({
+            width: element.width,
+            height: element.height,
+            fontFamily,
+            fontSize,
+            ...element,
+            originalText: text,
+            text: wrappedText,
+          });
+        } else {
+          const metrics = measureText(
+            normalizedText,
+            getFontString({ fontFamily, fontSize }),
+            lineHeight,
+          );
+          excalidrawElement = newTextElement({
+            width: metrics.width,
+            height: metrics.height,
+            fontFamily,
+            fontSize,
+            ...element,
+          });
+        }
         break;
       }
       case "image": {
