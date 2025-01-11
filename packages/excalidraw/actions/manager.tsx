@@ -195,7 +195,7 @@ export class ActionManager {
                 key={action.name}
                 type="button"
                 icon={action.icon as ReactNode}
-                title={action.name}
+                title={action.label as string}
                 aria-label={action.label as string}
                 onClick={() => updateData(null)}
                 visible={
